@@ -3,10 +3,10 @@
 import pygame
 
 class Platforms:
-    def __init__(self, canvas_size, num_platforms):
+    def __init__(self, canvas_size, num_platforms, start_dir='r'):
         self.platforms = []
         self.smashed = num_platforms-1
-        self.alternate_dir = 'r'
+        self.alternate_dir = start_dir
         for i in range(num_platforms):
             self.platforms.append(Platform(canvas_size, i+1))
     def smash(self):
@@ -37,12 +37,13 @@ class Platforms:
 class Platform:
     def __init__(self, canvas_size, level, prev=0):
         width = canvas_size[0]
-        spacing = canvas_size[1] / 8
-        height = canvas_size[1] / 12
+        spacing = canvas_size[1] / 10
+        height = canvas_size[1] / 20
         segments = 12
         self.rects = []
         for i in range(segments):
-            rect = pygame.Rect((width*i/segments, canvas_size[1]-spacing*(level+1)-spacing*(level-1), width/segments, height))
+            # rect = pygame.Rect((width*i/segments, canvas_size[1]-spacing*(level+1)-spacing*(level-1), width/segments, height))
+            rect = pygame.Rect((width*i/segments, canvas_size[1]-spacing*(level)-spacing*(level-1), width/segments, height))
             self.rects.append(rect)
         self.height = height
         self.width = width

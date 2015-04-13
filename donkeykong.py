@@ -29,20 +29,31 @@ foreground = pygame.Surface(size)
 background.fill(BLACK)
 
 # Generate and draw platforms
-levels = platform.Platforms(size, 3)
+levels = platform.Platforms(size, 5, start_dir='r')
 foreground = levels.render(foreground)
 
+# Sprites
+ss = spritesheet.spritesheet('res\sprites\enemies.png')
+
+dk_sprites = []
+dk_sprites.append(ss.image_at((100, 0, 50, 40)))
+
+for i in range(5):
+    dk_sprites.append(ss.image_at((50*i, 50, 50, 40)))
+
+for i in range(5):
+    dk_sprites.append(ss.image_at((50*i, 100, 50, 40)))
+
 # Create and add characters
-dk = boss.DK()
+dk = boss.DK(dk_sprites, size)
 
 # Move controllers
 dk_right = False
 dk_left = False
 
+
 # Game Loop
 while True:
-    pygame.draw.rect(foreground, (255, 0, 0), dk.obj)
-
     ev = pygame.event.poll()
     if ev.type == pygame.QUIT:
         print "Exit"
@@ -59,6 +70,9 @@ while True:
             dk_right = True
         if ev.key == 276:
             dk_left = True
+        # Cycle sprites for DK
+        if ev.key == 113:
+            dk.cycle_image()
     if ev.type == pygame.KEYUP:
         print ev.key
         if ev.key == 275:
@@ -67,7 +81,6 @@ while True:
             dk_left = False
 
     if dk_right:
-        print 'bananas'
         foreground.fill((0,0,0,0))
         foreground = levels.render(foreground)
         dk.move_right()
@@ -76,6 +89,7 @@ while True:
         foreground = levels.render(foreground)
         dk.move_left()
 
+    foreground.blit(dk.obj, (dk.x, dk.y))
     screen.blit(background, (0, 0))
     screen.blit(foreground, (0, 0))
     pygame.display.flip()
