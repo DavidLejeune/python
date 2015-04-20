@@ -43,6 +43,7 @@ for i in range(5):
 
 for i in range(5):
     dk_sprites.append(ss.image_at((50*i, 100, 50, 40)))
+    
 
 # Create and add characters
 dk = boss.DK(dk_sprites, size)
