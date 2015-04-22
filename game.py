@@ -15,7 +15,7 @@ def game():
     FPS = 30
     clock = pygame.time.Clock()
 
-    size = (600, 800)
+    size = (600, 850)
 
     screen = pygame.display.set_mode(size)  # Main surface
 
@@ -25,14 +25,14 @@ def game():
 
     platforms = []
 
-    h = size[1] - platform_img.get_height()
+    h = size[1] - platform_img.get_height() - 50
 
     for j in range(6):
         l = []
         for i in range(0, size[0], platform_img.get_width()):
             l.append((i, h))
         platforms.append(l)
-        h -= platform_img.get_height() * 4
+        h -= platform_img.get_height() * 3
 
     #Segment platforms
     for i in range(len(platforms[0])/2-2, len(platforms[0])):
@@ -56,6 +56,20 @@ def game():
         curr_y += 6*(i - (len(platforms[3])/2))
         print i
         platforms[3][i] = (platforms[3][i][0], curr_y)
+
+    for i in range(len(platforms[4])/2-2, len(platforms[4])):
+        curr_y = platforms[4][i][1]
+        curr_y -= 6*(i - (len(platforms[4])/2-2))
+        print i
+        platforms[4][i] = (platforms[4][i][0], curr_y)
+
+    barrel_sprite = ss.image_at((95, 260, 16, 10))
+    barrel_sprite = pygame.transform.scale(barrel_sprite, (16*scale_factor, 10*scale_factor))
+
+    #(94, 3), (15, 17)
+    mario_sprites = []
+    mario_sprites.append(pygame.transform.scale(ss.image_at((94, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
+
 
     ss = spritesheet.spritesheet('res\sprites\enemies.png')
 
@@ -82,6 +96,7 @@ def game():
 
     dk_sprite_counter = 2
 
+
     while True:
         ev = pygame.event.poll()
         if ev.type == pygame.QUIT:
@@ -102,7 +117,15 @@ def game():
             for pls in places:
                 background.blit(platform_img, pls)
 
-        background.blit(dk_sprites[dk_sprite_counter], (80,48))
+        background.blit(dk_sprites[dk_sprite_counter], (80,88))
+
+        sprite = mario_sprites[dk_sprite_counter]
+        background.blit(sprite, (0, size[1]-sprite.get_height()-82))
+
+        buffer_height = 5
+
+        for i in range(4):
+            background.blit(barrel_sprite, (0, buffer_height+barrel_sprite.get_height()*i))
 
         screen.blit(background, (0, 0))
         pygame.display.flip()
