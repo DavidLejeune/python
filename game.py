@@ -34,6 +34,29 @@ def game():
         platforms.append(l)
         h -= platform_img.get_height() * 4
 
+    #Segment platforms
+    for i in range(len(platforms[0])/2-2, len(platforms[0])):
+        curr_y = platforms[0][i][1]
+        curr_y -= 6*(i - (len(platforms[0])/2-2))
+        platforms[0][i] = (platforms[0][i][0], curr_y)
+
+    for i in range(0, len(platforms[1])/2):
+        curr_y = platforms[1][i][1]
+        curr_y += 6*(i - (len(platforms[1])/2))
+        print i
+        platforms[1][i] = (platforms[1][i][0], curr_y)
+
+    for i in range(len(platforms[2])/2-2, len(platforms[0])):
+        curr_y = platforms[2][i][1]
+        curr_y -= 6*(i - (len(platforms[2])/2-2))
+        platforms[2][i] = (platforms[2][i][0], curr_y)
+
+    for i in range(0, len(platforms[3])/2):
+        curr_y = platforms[3][i][1]
+        curr_y += 6*(i - (len(platforms[3])/2))
+        print i
+        platforms[3][i] = (platforms[3][i][0], curr_y)
+
     ss = spritesheet.spritesheet('res\sprites\enemies.png')
 
     dk_sprites = []
@@ -57,7 +80,7 @@ def game():
 
     background.fill(BLACK)
 
-    dk_sprite_counter = 3
+    dk_sprite_counter = 2
 
     while True:
         ev = pygame.event.poll()
@@ -70,7 +93,10 @@ def game():
             print ev.key
             # Cycle sprites for DK
             if ev.key == 113:
-                dk_sprite_counter += 1
+                if dk_sprite_counter == 2:
+                    dk_sprite_counter = 4
+                else:
+                    dk_sprite_counter = 2
 
         for places in platforms:
             for pls in places:
