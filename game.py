@@ -2,6 +2,7 @@
 
 import pygame, sys
 import spritesheet
+from mario import Mario
 
 
 ## Colors ##
@@ -69,7 +70,7 @@ def game():
     #(94, 3), (15, 17)
     mario_sprites = []
     mario_sprites.append(pygame.transform.scale(ss.image_at((94, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
-
+    mario_character = Mario((0, size[1]-mario_sprites[0].get_height()-82), mario_sprites)
 
     ss = spritesheet.spritesheet('res\sprites\enemies.png')
 
@@ -87,14 +88,23 @@ def game():
     for i in range(len(dk_sprites)):
         dk_sprites[i] = pygame.transform.scale(dk_sprites[i], (50*scale_factor, 40*scale_factor))
 
+    ss = spritesheet.spritesheet('res\sprites\ladder.png')
+
+    scale_factor = 2
+    ladder_sprite = pygame.transform.scale(ss.image_at((0, 0, 20, 50)), (int(20*scale_factor), int(40*scale_factor)))
+
     background = pygame.Surface(size) # BG Surface
     background = background.convert()
+    blank = pygame.Surface(size)
+    blank.fill(BLACK)
 
     foreground = pygame.Surface(size)
 
     background.fill(BLACK)
 
     dk_sprite_counter = 2
+
+    left, right, up, down = False, False, False, False
 
 
     while True:
@@ -112,15 +122,31 @@ def game():
                     dk_sprite_counter = 4
                 else:
                     dk_sprite_counter = 2
+            if ev.key == 275:
+                right = True
+            if ev.key == 276:
+                left = True
+        if ev.type == pygame.KEYUP:
+            if ev.key == 275:
+                right = False
+            if ev.key == 276:
+                left = False
 
+        background.blit(blank, (0,0))
+                
         for places in platforms:
             for pls in places:
                 background.blit(platform_img, pls)
 
         background.blit(dk_sprites[dk_sprite_counter], (80,88))
 
-        sprite = mario_sprites[dk_sprite_counter]
-        background.blit(sprite, (0, size[1]-sprite.get_height()-82))
+##        sprite = mario_sprites[0]
+##        background.blit(sprite, (0, size[1]-sprite.get_height()-82))
+        mario_character.update(left, right, up, down, platforms[0], platform_img.get_height())
+        mario_character.render(background)
+
+        background.blit(ladder_sprite, (550, 180))
+        background.blit(pygame.transform.scale(ladder_sprite, (40, 100)), (300, 200))
 
         buffer_height = 5
 
