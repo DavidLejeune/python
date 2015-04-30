@@ -69,10 +69,10 @@ def game():
 
     scale_factor = 3
     mario_sprites = []
-    mario_sprites.append(pygame.transform.scale(ss.image_at((94, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
-    mario_sprites.append(pygame.transform.scale(ss.image_at((175, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
-    mario_sprites.append(pygame.transform.scale(ss.image_at((160, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
-    mario_sprites.append(pygame.transform.scale(ss.image_at((135, 3, 15, 17)), (15*scale_factor, 17*scale_factor)))
+    mario_sprites.append(pygame.Surface.convert_alpha(pygame.transform.scale(ss.image_at((94, 3, 15, 17)), (15*scale_factor, 17*scale_factor))))
+    mario_sprites.append(pygame.Surface.convert_alpha(pygame.transform.scale(ss.image_at((175, 3, 15, 17)), (15*scale_factor, 17*scale_factor))))
+    mario_sprites.append(pygame.Surface.convert_alpha(pygame.transform.scale(ss.image_at((160, 3, 15, 17)), (15*scale_factor, 17*scale_factor))))
+    mario_sprites.append(pygame.Surface.convert_alpha(pygame.transform.scale(ss.image_at((135, 3, 15, 17)), (15*scale_factor, 17*scale_factor))))
     mario_character = Mario((0, size[1]-mario_sprites[0].get_height()-62), mario_sprites)
 
     ss = spritesheet.spritesheet('res\sprites\enemies.png')
@@ -88,6 +88,8 @@ def game():
 
     scale_factor = 2
 
+    print "# of sprites", len(dk_sprites)
+
     for i in range(len(dk_sprites)):
         dk_sprites[i] = pygame.transform.scale(dk_sprites[i], (50*scale_factor, 40*scale_factor))
 
@@ -96,7 +98,7 @@ def game():
     scale_factor = 2
     ladder_sprite = pygame.transform.scale(ss.image_at((0, 0, 20, 50)), (int(20*scale_factor), int(40*scale_factor)))
 
-    ladders = [[(500, 660)],[(50, 540)],[]]
+    ladders = [[(500, 660)],[(50, 540)],[(500, 420)], [(70, 300)], [(480, 190)], []]
 
     background = pygame.Surface(size) # BG Surface
     background = background.convert()
@@ -123,10 +125,14 @@ def game():
             print ev.key
             # Cycle sprites for DK
             if ev.key == 113:
-                if dk_sprite_counter == 2:
-                    dk_sprite_counter = 4
+##                if dk_sprite_counter == 2:
+##                    dk_sprite_counter = 4
+##                else:
+##                    dk_sprite_counter = 2
+                if dk_sprite_counter+1 < 5:
+                    dk_sprite_counter += 1
                 else:
-                    dk_sprite_counter = 2
+                    dk_sprite_counter = 0
             if ev.key == 275:
                 right = True
             if ev.key == 276:
