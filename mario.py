@@ -9,7 +9,7 @@ class Mario:
         self.y = pos[1]
         self.img_arr = img
         self.img_counter = 2
-        self.speed = 5
+        self.speed = 4
         self.last_dir = 'r'
         self.platform_level = 0
     def render(self, surface):
