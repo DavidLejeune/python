@@ -72,7 +72,9 @@ def game():
     for b in range(len(rolling_barrel_sprite_arr)):
         rolling_barrel_sprite_arr[b] = pygame.transform.scale(rolling_barrel_sprite_arr[b], (10*scale_factor, 10*scale_factor))
 
-    rolling_barrel = RollingBarrel((300,15*scale_factor*2+5), rolling_barrel_sprite_arr, (170, size[0]))
+##    rolling_barrel = RollingBarrel((300,15*scale_factor*2+5), rolling_barrel_sprite_arr, (170, size[0]))
+
+    rolling_barrels = []
 
     scale_factor = 3
     mario_sprites = []
@@ -105,7 +107,7 @@ def game():
     scale_factor = 2
     ladder_sprite = pygame.transform.scale(ss.image_at((0, 0, 20, 50)), (int(20*scale_factor), int(40*scale_factor)))
 
-    ladders = [[(500, 660)],[(50, 540)],[(500, 420)], [(70, 300)], [(480, 190)], []]
+    ladders = [[(500, 660)],[(50, 540)],[(500, 420)],[(70, 300)],[(480, 190)],[]]
 
     background = pygame.Surface(size) # BG Surface
     background = background.convert()
@@ -120,6 +122,9 @@ def game():
 
     left, right, up, down = False, False, False, False
 
+    dk_launch_stage = 0
+    dk_launch = False
+
 
     while True:
         ev = pygame.event.poll()
@@ -127,6 +132,19 @@ def game():
             print "Exit"
             break
 
+        if dk_launch:
+            print dk_launch_stage
+            if dk_launch_stage == 0:
+                dk_sprite_counter = 0
+            elif dk_launch_stage == 4:
+                dk_sprite_counter = 5
+            elif dk_launch_stage == 8:
+                dk_sprite_counter = 1
+                dk_launch_stage = 0
+                dk_launch = False
+                rolling_barrels.append(RollingBarrel((170,15*scale_factor*2+50), rolling_barrel_sprite_arr, (170, size[0])))
+            if dk_launch:
+                dk_launch_stage += 1
         # Keyboard events
         if ev.type == pygame.KEYDOWN:
             print ev.key
@@ -146,6 +164,8 @@ def game():
                 up = True
             if ev.key == 274:
                 down = True
+            if ev.key == 116:
+                dk_launch = True
         if ev.type == pygame.KEYUP:
             if ev.key == 275:
                 right = False
@@ -171,8 +191,12 @@ def game():
         mario_character.update(left, right, up, down, platforms, platform_img.get_height(), ladders)
         mario_character.render(background)
 
-        rolling_barrel.update(ladders)
-        rolling_barrel.render(background)
+##        rolling_barrel.update(platforms, platform_img.get_height(), ladders)
+##        rolling_barrel.render(background)
+
+        for rb in rolling_barrels:
+            rb.update(platforms, platform_img.get_height(), ladders)
+            rb.render(background)
 
         buffer_height = 5
 
