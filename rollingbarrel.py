@@ -17,7 +17,9 @@ class RollingBarrel:
     def render(self, surface):
         self.pos = (self.x, self.y)
         surface.blit(self.img_arr[self.img_counter], self.pos)
-        return surface        
+        return surface
+    def get_rect(self):
+        return pygame.Rect(self.pos, (self.img_arr[self.img_counter].get_width(), self.img_arr[self.img_counter].get_height()))
     def update(self, platforms, plt_height, ladders):
         if self.last_dir == 'r':
             if self.x + self.speed < self.max_x:

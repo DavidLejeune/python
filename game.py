@@ -125,12 +125,13 @@ def game():
     dk_launch_stage = 0
     dk_launch = False
 
+    game_state = True
 
-    while True:
+    while game_state:
         ev = pygame.event.poll()
         if ev.type == pygame.QUIT:
             print "Exit"
-            break
+            quit_game()
 
         if dk_launch:
             print dk_launch_stage
@@ -188,7 +189,14 @@ def game():
 
         background.blit(dk_sprites[dk_sprite_counter], (80,88))
 
-        mario_character.update(left, right, up, down, platforms, platform_img.get_height(), ladders)
+        mario_status = mario_character.update(left, right, up, down, platforms, platform_img.get_height(), ladders, rolling_barrels)
+
+        if mario_status == False:
+            font = pygame.font.Font(None, 40)
+            text = font.render("FAILED", 1, (250, 0, 0))
+            background.blit(text, (int(size[0]/2), int(size[1]/2)))
+            game_state = False
+        
         mario_character.render(background)
 
 ##        rolling_barrel.update(platforms, platform_img.get_height(), ladders)
@@ -206,8 +214,14 @@ def game():
         screen.blit(background, (0, 0))
         pygame.display.flip()
 
+def quit_game():
     print "Quitting game"
     pygame.quit()
     sys.exit()
 
-game()
+for i in range(3):
+    game()
+    pygame.time.wait(3000)
+
+quit_game()
+

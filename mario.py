@@ -27,13 +27,16 @@ class Mario:
     def move_right(self):
         self.x += self.speed
         self.last_dir = 'r'
-    def update(self, left, right, up, down, platforms, plt_height, ladders):
+    def update(self, left, right, up, down, platforms, plt_height, ladders, barrels):
         if right:
             self.img_counter = 1
             self.move_right()
         if left:
             self.img_counter = 0
             self.move_left()
+        if up:
+            if self.y <= platforms[self.platform_level+1][1]:
+                self.y -= 1
         if not right and not left:
             if self.last_dir == 'r':
                 self.img_counter = 2
@@ -54,3 +57,8 @@ class Mario:
                 if abs(l[0]-self.x) < 5 and down:
                     self.y += 10
                     self.platform_level -= 1
+        mario_rect = pygame.Rect(self.pos, (self.img_arr[self.img_counter].get_width(), self.img_arr[self.img_counter].get_height()))
+        for b in barrels:
+            if mario_rect.colliderect(b.get_rect()):
+                print "collision"
+                return False
