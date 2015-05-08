@@ -120,7 +120,7 @@ def game():
 
     dk_sprite_counter = 1
 
-    left, right, up, down = False, False, False, False
+    left, right, up, down, jump = False, False, False, False, False
 
     dk_launch_stage = 0
     dk_launch = False
@@ -167,6 +167,8 @@ def game():
                 down = True
             if ev.key == 116:
                 dk_launch = True
+            if ev.key == 32:
+                jump = True
         if ev.type == pygame.KEYUP:
             if ev.key == 275:
                 right = False
@@ -176,9 +178,11 @@ def game():
                 up = False
             if ev.key == 274:
                 down = False
+            if ev.key == 32:
+                jump = False
 
         background.blit(blank, (0,0))
-                
+
         for places in platforms:
             for pls in places:
                 background.blit(platform_img, pls)
@@ -189,7 +193,7 @@ def game():
 
         background.blit(dk_sprites[dk_sprite_counter], (80,88))
 
-        mario_status = mario_character.update(left, right, up, down, platforms, platform_img.get_height(), ladders, rolling_barrels)
+        mario_status = mario_character.update(left, right, up, down, jump, platforms, platform_img.get_height(), ladders, rolling_barrels)
 
         if mario_status == False:
             font = pygame.font.Font(None, 40)

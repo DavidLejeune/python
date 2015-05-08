@@ -12,6 +12,7 @@ class Mario:
         self.speed = 4
         self.last_dir = 'r'
         self.platform_level = 0
+        self.jumping = False
     def render(self, surface):
         self.pos = (self.x, self.y)
         surface.blit(self.img_arr[self.img_counter], self.pos)
@@ -27,24 +28,34 @@ class Mario:
     def move_right(self):
         self.x += self.speed
         self.last_dir = 'r'
-    def update(self, left, right, up, down, platforms, plt_height, ladders, barrels):
+    def jump(self, platforms, h):
+        print str(platforms[self.platform_level+1][1][1]), "::", str(self.y)
+        if self.y >= platforms[self.platform_level+1][1][1]+h:
+            self.y -= 10
+        else:
+            self.jumping = False
+            print "Done"
+    def update(self, left, right, up, down, jump, platforms, plt_height, ladders, barrels):
         if right:
             self.img_counter = 1
             self.move_right()
         if left:
             self.img_counter = 0
             self.move_left()
-        if up:
-            if self.y <= platforms[self.platform_level+1][1]:
-                self.y -= 1
+        if jump and not self.jumping:
+            self.jumping = True
+            print "Set to true"
+        if self.jumping:
+            self.jump(platforms, plt_height)
         if not right and not left:
             if self.last_dir == 'r':
                 self.img_counter = 2
             elif self.last_dir == 'l':
                 self.img_counter = 3
-        for p in platforms[self.platform_level]:
-            if abs(p[0]-self.x) < 10:
-                self.y = p[1]-plt_height-5
+        if not self.jumping:
+            for p in platforms[self.platform_level]:
+                if abs(p[0]-self.x) < 10:
+                    self.y = p[1]-plt_height-5
         for l in ladders[self.platform_level]:
             if abs(l[0]-self.x) < 5:
                 if up:
