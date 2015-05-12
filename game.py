@@ -20,6 +20,10 @@ def game():
 
     screen = pygame.display.set_mode(size)  # Main surface
 
+    ss = spritesheet.spritesheet('res\sprites\hammer.png')
+    scale_factor = 4
+    hammer_img = pygame.transform.scale(ss.image_at((0, 0, 10, 15)), (10*scale_factor, 15*scale_factor))
+
     ss = spritesheet.spritesheet('res\sprites\misc.gif')
     scale_factor = 4
     platform_img = pygame.transform.scale(ss.image_at((222, 270, 16, 10)), (16*scale_factor, 10*scale_factor))
@@ -67,7 +71,7 @@ def game():
     barrel_sprite = ss.image_at((95, 260, 16, 10))
     barrel_sprite = pygame.transform.scale(barrel_sprite, (16*scale_factor, 10*scale_factor))
 
-    rolling_barrel_sprite_arr = [ss.image_at((65, 257, 15, 12)), ss.image_at((80, 257, 15, 12)), ss.image_at((65, 270, 15, 10)), ss.image_at((80, 270, 15, 10))]
+    rolling_barrel_sprite_arr = [ss.image_at((65, 257, 15, 12)).convert_alpha(), ss.image_at((80, 257, 15, 12)).convert_alpha(), ss.image_at((65, 270, 15, 10)).convert_alpha(), ss.image_at((80, 270, 15, 10)).convert_alpha()]
 
     for b in range(len(rolling_barrel_sprite_arr)):
         rolling_barrel_sprite_arr[b] = pygame.transform.scale(rolling_barrel_sprite_arr[b], (10*scale_factor, 10*scale_factor))
@@ -214,6 +218,8 @@ def game():
 
         for i in range(4):
             background.blit(barrel_sprite, (0, buffer_height+barrel_sprite.get_height()*i))
+
+        background.blit(hammer_img, (400, 300))
 
         screen.blit(background, (0, 0))
         pygame.display.flip()

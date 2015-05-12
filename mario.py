@@ -28,13 +28,24 @@ class Mario:
     def move_right(self):
         self.x += self.speed
         self.last_dir = 'r'
+##    def jump(self, platforms, h):
+##        h -= 5
+##        if self.platform_level+1 < len(platforms):
+##            print str(platforms[self.platform_level+1][1][1]), "::", str(self.y)
+##            if self.y >= platforms[self.platform_level+1][1][1]+h:
+##                self.y -= 3
+##            else:
+##                self.jumping = False
+##        else:
+##            print "Last platform"
+##            if self.y > 0+h:
+##                self.y -= 3
+##            else:
+##                self.jumping = False
+##            print "Done"
     def jump(self, platforms, h):
-        print str(platforms[self.platform_level+1][1][1]), "::", str(self.y)
-        if self.y >= platforms[self.platform_level+1][1][1]+h:
-            self.y -= 10
-        else:
-            self.jumping = False
-            print "Done"
+        self.y -= 3
+        
     def update(self, left, right, up, down, jump, platforms, plt_height, ladders, barrels):
         if right:
             self.img_counter = 1
