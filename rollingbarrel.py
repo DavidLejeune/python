@@ -9,7 +9,7 @@ class RollingBarrel:
         self.y = pos[1]
         self.img_arr = img_arr
         self.img_counter = 3
-        self.speed = 1
+        self.speed = 0.15
         self.platform_level = 4
         self.last_dir = 'r'
         self.max_x = size[1]
@@ -33,7 +33,7 @@ class RollingBarrel:
         elif self.last_dir == 'l':
             if self.x - self.speed >= self.min_x:
                 self.x -= self.speed
-            else:   
+            else:
                 self.last_dir = 'r'
             if self.img_counter - 1 >= 0:
                 self.img_counter -= 1
