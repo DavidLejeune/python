@@ -11,6 +11,8 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 ## End Colors ##
 
+lives = 3
+
 def game():
     pygame.init()
 
@@ -40,6 +42,10 @@ def game():
         platforms.append(l)
         h -= platform_img.get_height() * 3
 
+    platforms.append([(300, 50), (300+platform_img.get_width(), 50)])
+
+    #(106, 125)
+
     #Segment platforms
     for i in range(len(platforms[0])/2-2, len(platforms[0])):
         curr_y = platforms[0][i][1]
@@ -49,7 +55,7 @@ def game():
     for i in range(0, len(platforms[1])/2):
         curr_y = platforms[1][i][1]
         curr_y += 6*(i - (len(platforms[1])/2))
-        print i
+        ##print i
         platforms[1][i] = (platforms[1][i][0], curr_y)
 
     for i in range(len(platforms[2])/2-2, len(platforms[0])):
@@ -60,13 +66,13 @@ def game():
     for i in range(0, len(platforms[3])/2):
         curr_y = platforms[3][i][1]
         curr_y += 6*(i - (len(platforms[3])/2))
-        print i
+        ##print i
         platforms[3][i] = (platforms[3][i][0], curr_y)
 
     for i in range(len(platforms[4])/2-2, len(platforms[4])):
         curr_y = platforms[4][i][1]
         curr_y -= 6*(i - (len(platforms[4])/2-2))
-        print i
+        ##print i
         platforms[4][i] = (platforms[4][i][0], curr_y)
 
     barrel_sprite = ss.image_at((95, 260, 16, 10))
@@ -103,6 +109,8 @@ def game():
 
     mario_character = Mario((0, size[1]-mario_sprites[0].get_height()-62), mario_sprites, mario_hammer_sprites)
 
+    daisy_sprite = pygame.Surface.convert_alpha(pygame.transform.scale(ss.image_at((106, 125, 15, 17)), (15*scale_factor, 17*scale_factor)))
+
     ss = spritesheet.spritesheet('res\sprites\enemies.png')
 
     dk_sprites = []
@@ -116,7 +124,7 @@ def game():
 
     scale_factor = 2
 
-    print "# of sprites", len(dk_sprites)
+    ##print "# of sprites", len(dk_sprites)
 
     for i in range(len(dk_sprites)):
         dk_sprites[i] = pygame.transform.scale(dk_sprites[i], (50*scale_factor, 40*scale_factor))
@@ -126,7 +134,7 @@ def game():
     scale_factor = 2
     ladder_sprite = pygame.transform.scale(ss.image_at((0, 0, 20, 50)), (int(20*scale_factor), int(40*scale_factor)))
 
-    ladders = [[(500, 660)],[(50, 540)],[(500, 420)],[(70, 300)],[(480, 190)],[]]
+    ladders = [[(500, 660)],[(50, 540)],[(500, 420)],[(70, 300)],[(480, 190)],[(310, 90)],[]]
 
     background = pygame.Surface(size) # BG Surface
     background = background.convert()
@@ -150,8 +158,10 @@ def game():
 
     launch_buffer = 0
 
+    daisy_call = 0
+
     while game_state:
-        if launch_buffer % 10e5 == 0:
+        if launch_buffer % 500 == 0:
             # l_int = random.randint(1,100)
             # if l_int >= 97 and l_int <= 100:
             #     dk_launch = True
@@ -160,11 +170,11 @@ def game():
 
         ev = pygame.event.poll()
         if ev.type == pygame.QUIT:
-            print "Exit"
+            ##print "Exit"
             quit_game()
 
         if dk_launch:
-            print dk_launch_stage
+            #print dk_launch_stage
             if dk_launch_stage == 0:
                 dk_sprite_counter = 0
             elif dk_launch_stage == 4:
@@ -173,12 +183,16 @@ def game():
                 dk_sprite_counter = 1
                 dk_launch_stage = 0
                 dk_launch = False
-                rolling_barrels.append(RollingBarrel((170,15*scale_factor*2+50), rolling_barrel_sprite_arr, (170, size[0])))
+                fall = random.randint(0, 1)
+                if fall == 1:
+                    rolling_barrels.append(RollingBarrel((170,15*scale_factor*2+50), rolling_barrel_sprite_arr, (170, size[0]), True))
+                else:
+                    rolling_barrels.append(RollingBarrel((170,15*scale_factor*2+50), rolling_barrel_sprite_arr, (170, size[0])))
             if dk_launch:
                 dk_launch_stage += 1
         # Keyboard events
         if ev.type == pygame.KEYDOWN:
-            print ev.key
+            #print ev.key
             # Cycle sprites for DK
             if ev.key == 113:
                 if dk_sprite_counter == 1:
@@ -238,6 +252,8 @@ def game():
         for i in range(4):
             background.blit(barrel_sprite, (0, buffer_height+barrel_sprite.get_height()*i))
 
+        background.blit(daisy_sprite, (310, 10))
+
         m_items = []
         for i in items:
             m_items.append(pygame.Rect(i[0], i[1], hammer_img.get_width(), hammer_img.get_height()))
@@ -245,11 +261,25 @@ def game():
 
         mario_status = mario_character.update(left, right, up, down, jump, platforms, platform_img.get_height(), ladders, rolling_barrels, m_items)
 
+        font = pygame.font.Font(None, 20)
+        text = font.render("Lives: " + str(lives), 1, (250, 250, 250))
+        background.blit(text, (int(size[0]-70), int(10)))
+
+        if daisy_call > 0 and daisy_call < 150:
+            font = pygame.font.Font(None, 25)
+            text = font.render("HELP!", 1, (250, 250, 250))
+            background.blit(text, (360, 10))
+        daisy_call += 1
+        if daisy_call >= 300:
+            daisy_call = 0
+
         if mario_status == False:
             font = pygame.font.Font(None, 40)
             text = font.render("FAILED", 1, (250, 0, 0))
             background.blit(text, (int(size[0]/2), int(size[1]/2)))
             game_state = False
+            global lives
+            lives -= 1
         elif mario_status == 10:
             items = []
         elif type(mario_status) == tuple:
@@ -259,7 +289,7 @@ def game():
         pygame.display.flip()
 
 def quit_game():
-    print "Quitting game"
+    #print "Quitting game"
     pygame.quit()
     sys.exit()
 

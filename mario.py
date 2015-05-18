@@ -11,7 +11,7 @@ class Mario:
         self.img_hammer_arr = img_hammer
         self.img_set = 0
         self.img_counter = 2
-        self.speed = 0.2
+        self.speed = 2
         self.last_dir = 'r'
         self.platform_level = 0
         self.jumping = False
@@ -37,13 +37,14 @@ class Mario:
         self.x += self.speed
         self.last_dir = 'r'
     def jump(self, platforms, h):
+        j = 1 #0.2
         if self.jump_dir == 0:
-            self.y -= 0.2
+            self.y -= j
             self.jumpY += 1
-            if self.jumpY >= 400:
+            if self.jumpY >= 80:
                 self.jump_dir = 1
         elif self.jump_dir == 1:
-            self.y += 0.2
+            self.y += j
             self.jumpY -= 1
             if self.jumpY <= 0:
                 self.jump_dir = 0
@@ -68,7 +69,7 @@ class Mario:
             self.move_left()
         if jump and not self.jumping:
             self.jumping = True
-            print "Set to true"
+            ##print "Set to true"
         if self.jumping:
             self.jump(platforms, plt_height)
         if not right and not left:
@@ -85,22 +86,22 @@ class Mario:
                 if up:
                     self.y -= 10
                     self.platform_level += 1
-                print self.platform_level
-                print "^^"
+                #print self.platform_level
+                ##print "^^"
         if self.platform_level > 0 and not self.jumping:
             for l in ladders[self.platform_level-1]:
                 if abs(l[0]-self.x) < 5 and down:
                     self.y += 10
                     self.platform_level -= 1
         if self.hammer:
-            if self.hammer_movement < 50 and self.hammer_movement >= 0:
-                print "up"
+            if self.hammer_movement < 5 and self.hammer_movement >= 0:
+                ##print "up"
                 if self.last_dir == 'l':
                     self.img_counter = 7
                 else:
                     self.img_counter = 10
-            elif self.hammer_movement >= 50 and self.hammer_movement < 100:
-                print "down"
+            elif self.hammer_movement >= 5 and self.hammer_movement < 10:
+                ###print "down"
                 if self.last_dir == 'l':
                     self.img_counter = 6
                 else:
@@ -117,12 +118,12 @@ class Mario:
                 return 10
         for b in barrels:
             r = tuple(b.get_rect())
-            print "R"
-            print r
+            #print "R"
+            #print r
             mod_rect = pygame.Rect((r[0]+35, r[1]+5), (r[2]-5, r[3]))
             if mario_rect.colliderect(mod_rect):
                 if not self.hammer:
-                    print "collision"
+                    #print "collision"
                     return False
                 else:
                     return ('barrel', barrels.index(b))
