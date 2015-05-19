@@ -21,6 +21,7 @@ class Mario:
         self.cushion = 0
         self.hammer_movement = 0
         self.run_pos = 0
+        self.hammer_count = 0
     def render(self, surface):
         self.pos = (self.x, self.y-self.cushion)
         surface.blit(self.img_arr[self.img_counter], self.pos)
@@ -50,7 +51,7 @@ class Mario:
                 self.jump_dir = 0
                 self.jumping = False
 
-    def update(self, left, right, up, down, jump, platforms, plt_height, ladders, barrels, items):
+    def update(self, left, right, up, down, jump, platforms, plt_height, ladders, barrels, items, daisy):
         if right:
             if self.run_pos == 0:
                 self.img_counter = 1
@@ -94,6 +95,10 @@ class Mario:
                     self.y += 10
                     self.platform_level -= 1
         if self.hammer:
+            self.hammer_count += 1
+            if self.hammer_count >= 200*10:
+                self.hammer = False
+                self.hammer_count = 0
             if self.hammer_movement < 5 and self.hammer_movement >= 0:
                 ##print "up"
                 if self.last_dir == 'l':
@@ -116,6 +121,8 @@ class Mario:
                 # self.img_counter = 4
                 self.hammer = True
                 return 10
+        if mario_rect.colliderect(daisy):
+            return "Done"
         for b in barrels:
             r = tuple(b.get_rect())
             #print "R"

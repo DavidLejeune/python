@@ -12,6 +12,9 @@ RED = (255, 0, 0)
 ## End Colors ##
 
 lives = 3
+begin = True
+
+speed = 100
 
 def game():
     pygame.init()
@@ -160,11 +163,23 @@ def game():
 
     daisy_call = 0
 
-    while game_state:
-        if launch_buffer % 500 == 0:
-            # l_int = random.randint(1,100)
-            # if l_int >= 97 and l_int <= 100:
-            #     dk_launch = True
+    global begin
+
+##    while not begin:
+##        font = pygame.font.Font(None, 40)
+##        text = font.render("Donkey Kong", 1, (250, 0, 0))
+##        font = pygame.font.Font(None, 30)
+##        subtitle = font.render("Press Space to Start", 1, (250, 0, 0))
+##        background.blit(text, (int(size[0]/2)-70, int(size[1]/2)))
+##        screen.blit(background, (0, 0))
+##        pygame.display.flip()
+##        if ev.type == pygame.KEYDOWN:
+##            if ev.key == 32:
+##                begin = False
+
+    while game_state and begin:
+        global speed
+        if launch_buffer % speed == 0:
             dk_launch = True
         launch_buffer += 1
 
@@ -192,7 +207,7 @@ def game():
                 dk_launch_stage += 1
         # Keyboard events
         if ev.type == pygame.KEYDOWN:
-            #print ev.key
+            print ev.key
             # Cycle sprites for DK
             if ev.key == 113:
                 if dk_sprite_counter == 1:
@@ -259,9 +274,10 @@ def game():
             m_items.append(pygame.Rect(i[0], i[1], hammer_img.get_width(), hammer_img.get_height()))
             background.blit(hammer_img, i)
 
-        mario_status = mario_character.update(left, right, up, down, jump, platforms, platform_img.get_height(), ladders, rolling_barrels, m_items)
+        mario_status = mario_character.update(left, right, up, down, jump, platforms, platform_img.get_height(), ladders, rolling_barrels, m_items, pygame.Rect((310,10), (daisy_sprite.get_width(), daisy_sprite.get_height())))
 
         font = pygame.font.Font(None, 20)
+        
         text = font.render("Lives: " + str(lives), 1, (250, 250, 250))
         background.blit(text, (int(size[0]-70), int(10)))
 
@@ -284,6 +300,16 @@ def game():
             items = []
         elif type(mario_status) == tuple:
             rolling_barrels.pop(mario_status[1])
+        elif mario_status == "Done":
+            font = pygame.font.Font(None, 40)
+            text = font.render("Level Complete", 1, (0, 250, 0))
+            background.blit(text, (int(size[0]/2)-60, int(size[1]/2)))
+            game_state = False
+            global lives
+            lives = 3
+            global speed
+            speed -= 100
+            game_state = False
 
         screen.blit(background, (0, 0))
         pygame.display.flip()
@@ -293,7 +319,8 @@ def quit_game():
     pygame.quit()
     sys.exit()
 
-for i in range(3):
+global lives
+for i in range(lives):
     game()
     pygame.time.wait(3000)
 
