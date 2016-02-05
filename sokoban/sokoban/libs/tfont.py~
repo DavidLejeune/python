@@ -1,0 +1,5 @@
+import pygame
+from test import *
+dips = pygame.display.set_mode((550,367))
+print run(['menu0','totox','tataxx0','tutu','titi'],(255,255,255),20)
+
