@@ -19,3 +19,6 @@ TO DO : remove the merge of commits from https://github.com/vsudhakar/pykong
 06/02/2016 15:03
 added python27 to windows path enviroment variable , launch pythonfiles with
 the command : idle <python file>
+
+07/02/2016 02:31
+found Super Mario attempt , no sprites (only rectangles) , bad game exit

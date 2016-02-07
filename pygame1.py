@@ -6,27 +6,16 @@ gameExit = False
 
 #intialise the pygame stuff
 #return result of init
-pygame.init()
+#pygame.init()
 x = pygame.init()
 print(x)
 
-
 #basic frame with title
 gameDisplay = pygame.display.set_mode((800,600))
-pygame.display.set_caption('Snake Revamp')
-
-
-
+pygame.display.set_caption(gameTitle)
 
 pygame.display.update()
-#pygame.display.flip()
-
-
-
-
-
-
-
+#alternative : pygame.display.flip()
 
 
 while not gameExit:
@@ -34,14 +23,12 @@ while not gameExit:
         if event.type == pygame.QUIT:
             gameExit = True
 
-        
+        #event debugging
         print(event)
-
-
-
-
-
 
 
 pygame.quit()
 quit()
+
+
+
