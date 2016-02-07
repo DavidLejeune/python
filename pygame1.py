@@ -3,7 +3,6 @@ import pygame
 gameTitle = 'Snake Revamp'
 gameExit = False
 
-
 #intialise the pygame stuff
 #return result of init
 #pygame.init()
@@ -29,6 +28,3 @@ while not gameExit:
 
 pygame.quit()
 quit()
-
-
-
