@@ -5,8 +5,9 @@
    / /_/ /  / /_/ /  / /___   /  __/
   /_____/   \__,_/  /_____/   \___/
 
-  gitHub repostiry for all my python attempts
-  created 04/02/2016 19:56
+  #description :gitHub repostiry for all my python attempts
+  #author : David Lejeune
+  #created :04/02/2016 19:56
 
 -------------------------------------------------------------------------------
 
