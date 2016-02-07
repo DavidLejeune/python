@@ -22,3 +22,7 @@ the command : idle <python file>
 
 07/02/2016 02:31
 found Super Mario attempt , no sprites (only rectangles) , bad game exit
+https://github.com/Thickney/PyGameSMB
+
+07/02/2016 02:43
+found Space invader clone , very good version https://github.com/ZachR0/PyVader
