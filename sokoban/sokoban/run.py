@@ -15,6 +15,7 @@ categrep = os.path.join(os.path.dirname(__file__),'categs')
 SCREEN = display.set_mode((800,800))
 FADE = Surface((800,800))
 
+
 wall = image.load(os.path.join(imgrep,'parpaing.png'))
 woodbox = image.load(os.path.join(imgrep,'woodbox2.png'))
 zone = image.load(os.path.join(imgrep,'zone.png'))
